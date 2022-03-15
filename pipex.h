@@ -6,7 +6,8 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include <fcntl.h>
-
+# include <string.h>
+# include <errno.h>
 
 typedef struct s_verif
 {
@@ -20,7 +21,13 @@ typedef struct s_verif
 typedef struct s_split
 {
 	int data;
-	char **tab;
+	char **path;
+	char **arg;
+	char *a;
+	char *tmp1;
+	int checker;
+	int i;
+	int w_count;
 } t_split;
 
 
@@ -32,11 +39,20 @@ int		ft_strncmp(const char *s1, const char *s2, size_t n);
 int		ft_strlen(char *c);
 char    *ft_strrchr(const char *s, int c);
 /* ERROR */
-void 	error_name();
+void 	error_name(int i);
 void	empty_file(int fd);
-void	file_void();
+void	file_void(int i);
+void 	wrongly_written(char *cmd);
 
-/* SPLIT */
-void	*ft_split(char *s, char c, t_split *split);
+/* useful funct */
+void 	verif_path(t_split *split, char **envp, char *cmd);
+char	**ft_split(char *s, char c,	t_split *split);
 char	**make_a_word(char *s, char c, char **tab, size_t count);
+char	*ft_strdup(char *s1);
+char	*ft_substr(char  *s, unsigned int start, size_t len);
+int		count_word(char *s, char c,t_split *split);
+char	**free_malloc(char **tab, int count);
+char	*ft_strjoin(char *s1, char *s2);
+char	*ft_strchr(const char *s, int c);
+void 	verif_path(t_split *split, char **envp, char *cmd);
 #endif

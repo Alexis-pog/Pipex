@@ -6,19 +6,41 @@
 /*   By: acoquele <acoquele@student@.42.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/07 11:48:02 by acoquele          #+#    #+#             */
-/*   Updated: 2022/03/08 17:47:51 by acoquele         ###   ########.fr       */
+/*   Updated: 2022/03/15 14:53:38 by acoquele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-int ft_strlen(char *c)
+
+char	*ft_strjoin(char *s1, char *s2)
 {
-	int i = 0;
-	while(c[i])
+	char	*main_str;
+	int		i;
+	int		i2;
+
+	if (!s1)
+		return (NULL);
+	i = 0;
+	i2 = 0;
+	main_str = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
+	if (!main_str)
+		return (NULL);
+	while (s1[i])
+	{
+		main_str[i] = s1[i];
 		i++;
-	return(i);
+	}
+	while (s2[i2])
+	{
+		main_str[i] = s2[i2];
+		i++;
+		i2++;
+	}
+	main_str[i] = '\0';
+	return (main_str);
 }
+
 
 char	*ft_strdup(char *s1)
 {
@@ -66,7 +88,7 @@ char	*ft_substr(char  *s, unsigned int start, size_t len)
 	return (sub_str);
 }
 
-static int	count_word(char *s, char c)
+int	count_word(char *s, char c)
 {
 	size_t	count;
 	size_t	index;
@@ -91,7 +113,7 @@ static int	count_word(char *s, char c)
 	return (count);
 }
 
-static char	**free_malloc(char **tab, int count)
+char	**free_malloc(char **tab, int count)
 {	
 	while (tab[--count])
 		free(tab[count]);
@@ -145,15 +167,73 @@ void	*ft_split(char *s, char c, t_split *split)
 }
 
 
-int main()
+
+
+int main(int argc, char **argv, char **envp)
 { 
+	char *b;
+	int checker = 0;
+	char *a = ft_strchr(envp[13],'/');
     t_split split;
-	char a[] = "ls -a";
-	ft_split(a,' ',&split);
-	int j = 0;
-	while (split.tab[j])
-		printf("%s\n",split.tab[j++]);
-	if (!split.tab[0])
-		printf("good-job");
-    return (0);
+	if (argc > 1)
+	{
+		if (argv[1][0] != '/')
+		{
+			ft_split(a,':',&split);
+			int j = 0;
+			while (split.tab[j])
+				printf("%s\n",split.tab[j++]);
+			split.tab[j] = NULL;
+			b = ft_strjoin("/",argv[1]);
+			j = 0;
+
+			while(split.tab[j])
+			{
+				checker = access(ft_strjoin(split.tab[j], b), F_OK);
+				printf("%d\n",checker);
+				j++;
+			}
+			if (!split.tab[0])
+				printf("good-job");
+			printf("\n%s\n",b);
+		}
+		else
+			if(access(argv[1], F_OK) == 0)
+				printf("OK");
+		else
+			printf("you wrote this : %s",argv[1]);
+	}
+	return (0);
+}
+ if (argv[2][0] != '/')
+		{
+			split.i = 0;
+            while(strncmp("PATH=",envp[split.i],5) != 0)
+                split.i++;
+            ft_split(&envp[split.i][5],':',&split);
+			int j = 0;
+			while (split.tab[j])
+				printf("%s\n",split.tab[j++]);
+			split.tab[j] = NULL;
+			split.tmp1 = ft_strjoin("/",argv[2]);
+			j = 0;
+
+			while(split.tab[j])
+			{
+				split.checker = access(ft_strjoin(split.tab[j], split.tmp1), F_OK);
+				printf("%d\n",split.checker);
+				j++;
+			}
+			if (!split.tab[0])
+				printf("good-job");
+			printf("\n%s\n",split.tmp1);
+		}
+		else
+        {
+			if(access(argv[2], F_OK) == 0)
+				printf("OK");
+		    else
+			    printf("you wrote this : %s",argv[2]);
+        }
+	}
 }

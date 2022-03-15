@@ -6,7 +6,7 @@
 /*   By: acoquele <acoquele@student@.42.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/28 11:43:50 by acoquele          #+#    #+#             */
-/*   Updated: 2022/02/28 16:55:55 by acoquele         ###   ########.fr       */
+/*   Updated: 2022/03/14 11:29:43 by acoquele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 int ft_strlen(char *c)
 {
 	int i = 0;
+	if (!c)
+		return(0);
 	while(c[i])
 		i++;
 	return(i);
@@ -65,4 +67,21 @@ void init_verit_var(t_verif *verif)
 	verif->s = malloc(1);
 	verif->fd = 0;
 	free(verif->s);
+}
+
+char	*ft_strchr(const char *s, int c)
+{
+	char	*str;
+
+	str = (char *)s;
+	c %= 256;
+	while (*str)
+	{
+		if (*str == c)
+			return ((char *)str);
+		str++;
+	}
+	if (!c)
+		return ((char *)str);
+	return (NULL);
 }

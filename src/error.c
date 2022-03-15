@@ -6,27 +6,40 @@
 /*   By: acoquele <acoquele@student@.42.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/28 11:41:58 by acoquele          #+#    #+#             */
-/*   Updated: 2022/03/08 13:32:31 by acoquele         ###   ########.fr       */
+/*   Updated: 2022/03/15 15:47:28 by acoquele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../pipex.h"
 
-void file_void()
+void file_void(int i)
 {
 	perror("error");
-	exit(0);
+	i++;
+	exit(1);
 }
 
 void empty_file(int fd)
 {
 	write(1,"the file is empty\n",18);
 	close(fd);
-	exit(0);
+	exit(1);
 }
 
-void error_name()
+void error_name(int i)
 {
 	write(1,"must be a .txt file\n",20);
-	exit(0);
+	i++;
+	exit(1);
+}
+
+
+void wrongly_written(char *cmd)
+{
+	int i;
+	i = ft_strlen(cmd);
+	write(1,"you wrote : ",13);
+	write(1,cmd,i);
+	write(1,"\nmaybe try rewriting it\n",25);
+	exit(1);
 }
