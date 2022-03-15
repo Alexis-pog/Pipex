@@ -28,6 +28,8 @@ typedef struct s_split
 	int checker;
 	int i;
 	int w_count;
+	int cmd_count;
+	int index2;
 } t_split;
 
 

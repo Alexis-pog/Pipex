@@ -6,7 +6,7 @@
 /*   By: acoquele <acoquele@student@.42.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/14 17:46:30 by acoquele          #+#    #+#             */
-/*   Updated: 2022/03/15 17:59:25 by acoquele         ###   ########.fr       */
+/*   Updated: 2022/03/15 19:52:58 by acoquele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ void verif_path(t_split *split, char **envp, char *cmd)
 	while(split->path[j])
 	{
 		split->checker = access(ft_strjoin(split->path[j], split->tmp1), F_OK);
-		// printf("%d\n",split->checker);
 		if(access(ft_strjoin(split->path[j], split->tmp1), F_OK) == 0)
 			break;
 		j++;
@@ -58,7 +57,7 @@ int main(int argc, char **argv, char **envp)
 	t_split split;
 	int i;
 
-	i = 2;
+	split.index2 = 2;
 	init_verit_var(&verif);
 	if (argc > 1)
 	{
@@ -73,16 +72,16 @@ int main(int argc, char **argv, char **envp)
 		verif.fd = open(argv[1],O_RDONLY);
 		if (read(verif.fd,verif.s,1) == 0)
 			empty_file(verif.fd);
-		// verif.verif_nbr = access(argv[argc - 1],F_OK);
 		printf("%d\n",verif.verif_nbr);
 		printf("%s\n",argv[2]);
-		while(i > argc - 2)
+		while(split.index2 > argc - 2)
 		{
 			split.arg = ft_split(argv[i],' ', &split);
+			split.cmd_count = split.w_count;
 			verif_path(&split, envp, split.arg[0]);
 			
-			free_malloc(split.arg,split.w_count);
-			i++;
+			free_malloc(split.arg, split.cmd_count);
+			split.index2++;
 		}
 	}
 	else
