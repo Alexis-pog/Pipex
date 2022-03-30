@@ -29,12 +29,22 @@ typedef struct s_split
 	int i;
 	int w_count;
 	int cmd_count;
-	int index2;
+	int index;
+	int argc;
+	int fd[1024];
+	int fd_i;
+	int fd_in;
+	int fd_out;
+	int pipe[2];
+	char *infile;
+	char *outfile;
+	pid_t parent;
 } t_split;
 
 
 /*Init var*/
-void	init_verit_var(t_verif *verif);
+void	init_verit_var(t_verif *verif, t_split *split, int argc);
+void	init_in_out(t_split *split, char **argv);
 
 /* HELP VERIF */
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
@@ -57,4 +67,5 @@ char	**free_malloc(char **tab, int count);
 char	*ft_strjoin(char *s1, char *s2);
 char	*ft_strchr(const char *s, int c);
 void 	verif_path(t_split *split, char **envp, char *cmd);
+void	*ft_memset(void *str, int c, size_t n);
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: acoquele <acoquele@student@.42.fr>         +#+  +:+       +#+        */
+/*   By: workplace <workplace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/28 11:41:58 by acoquele          #+#    #+#             */
-/*   Updated: 2022/03/15 15:47:28 by acoquele         ###   ########.fr       */
+/*   Updated: 2022/03/23 12:16:41 by workplace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,7 @@
 void file_void(int i)
 {
 	perror("error");
-	i++;
-	exit(1);
+	exit(i);
 }
 
 void empty_file(int fd)

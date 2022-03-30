@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   verif_funct.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: acoquele <acoquele@student@.42.fr>         +#+  +:+       +#+        */
+/*   By: workplace <workplace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/28 10:32:56 by acoquele          #+#    #+#             */
-/*   Updated: 2022/03/15 17:59:42 by acoquele         ###   ########.fr       */
+/*   Updated: 2022/03/21 15:06:16 by workplace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ char	*ft_substr(char  *s, unsigned int start, size_t len)
 	char	*sub_str;
 	size_t	count;
 
-	if (!s || s == '\0')
+	if (!s || *s == '\0')
 		return (NULL);
 	count = 0;
 	if (start >= (unsigned int)ft_strlen((char *)s))

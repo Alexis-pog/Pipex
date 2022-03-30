@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   help_verif_funct.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: acoquele <acoquele@student@.42.fr>         +#+  +:+       +#+        */
+/*   By: workplace <workplace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/28 11:43:50 by acoquele          #+#    #+#             */
-/*   Updated: 2022/03/14 11:29:43 by acoquele         ###   ########.fr       */
+/*   Updated: 2022/03/22 11:02:13 by workplace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,13 +59,23 @@ char    *ft_strrchr(const char *s, int c)
 	return (&str[i]);
 }
 
-void init_verit_var(t_verif *verif)
+void	init_in_out(t_split *split, char **argv)
+{
+	split->infile = argv[1];
+	split->outfile = argv[split->argc];
+}
+
+void init_verit_var(t_verif *verif, t_split *split, int argc)
 {
 	verif->verif_nbr = 0;
 	verif->vrf_lenght = 0;
 	verif->verif = "";
 	verif->s = malloc(1);
 	verif->fd = 0;
+	split->index = 2;
+	split->fd_i = 0;
+	split->argc = argc;
+	ft_memset(split->fd,0,sizeof(split->fd));
 	free(verif->s);
 }
 
@@ -84,4 +94,16 @@ char	*ft_strchr(const char *s, int c)
 	if (!c)
 		return ((char *)str);
 	return (NULL);
+}
+
+void	*ft_memset(void *str, int c, size_t n)
+{
+	size_t	count;
+
+	count = -1;
+	while (++count < n)
+	{
+		*(unsigned char *)(str + count) = (unsigned char)c;
+	}
+	return (str);
 }

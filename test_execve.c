@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   test_execve.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: acoquele <acoquele@student@.42.fr>         +#+  +:+       +#+        */
+/*   By: workplace <workplace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/28 12:55:53 by acoquele          #+#    #+#             */
-/*   Updated: 2022/03/09 11:40:40 by acoquele         ###   ########.fr       */
+/*   Updated: 2022/03/17 16:39:29 by workplace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ int main(int argc, char **argv, char **envp)
     int j = 0;
     int i = access(argv[1], F_OK);
     t_split split;
-    ft_split(argv[1],' ',&split);
     
     printf("%d",i);
     if (i == -1)
