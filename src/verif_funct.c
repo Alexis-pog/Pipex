@@ -6,7 +6,7 @@
 /*   By: acoquele <acoquele@student@.42.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/28 10:32:56 by acoquele          #+#    #+#             */
-/*   Updated: 2022/03/30 13:48:07 by acoquele         ###   ########.fr       */
+/*   Updated: 2022/04/20 11:20:53 by acoquele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,53 +40,6 @@ char	*ft_strjoin(char *s1, char *s2)
 	return (main_str);
 }
 
-
-char	*ft_strdup(char *s1)
-{
-	char	*s2;
-	int		i;
-
-	i = 0;
-	s2 = malloc(sizeof(char) * (ft_strlen((char *)s1) + 1));
-	if (!s2)
-		return (NULL);
-	while (s1[i])
-	{
-		s2[i] = s1[i];
-		i++;
-	}
-	s2[i] = '\0';
-	return (s2);
-}
-
-char	*ft_substr(char  *s, unsigned int start, size_t len)
-{
-	char	*sub_str;
-	size_t	count;
-
-	if (!s || *s == '\0')
-		return (NULL);
-	count = 0;
-	if (start >= (unsigned int)ft_strlen((char *)s))
-		return (ft_strdup(""));
-	if (ft_strlen((char *)s) - start < len)
-		len = ft_strlen((char *)s) - start;
-	sub_str = malloc(sizeof(char) * (len + 1));
-	if (!sub_str)
-		return (NULL);
-	while (len > 0)
-	{
-		sub_str[count] = s[start];
-		start++;
-		count++;
-		if (len == 0)
-			break ;
-		len--;
-	}
-	sub_str[count] = '\0';
-	return (sub_str);
-}
-
 int	count_word(char *s, char c, t_split *split)
 {
 	int		count;
@@ -109,17 +62,15 @@ int	count_word(char *s, char c, t_split *split)
 		count = 0;
 	else if (s[index - 1] != c)
 		count++;
-	// printf("%d",count);
 	split->w_count = count;
-	// printf("%d",count);
 	return (count);
 }
 
 char	**free_malloc(char **tab)
 {
-	int count;
+	int	count;
+
 	count = 0;
-	
 	while (tab[count])
 		free(tab[count++]);
 	free (tab);
@@ -158,12 +109,12 @@ char	**ft_split(char *s, char c, t_split *split)
 	char	*new_s;
 	size_t	count;
 
-    new_s = (char *)s;
+	new_s = (char *)s;
 	if (!new_s)
 		return (NULL);
 	count = count_word(s, c, split);
 	tab = malloc(sizeof(char *) * (count + 1));
 	if (!tab)
 		return (NULL);
-    return (make_a_word(new_s, c, tab, count));
+	return (make_a_word(new_s, c, tab, count));
 }

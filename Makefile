@@ -5,9 +5,12 @@ INC = pipex.h
 
 SRC1 = 	src/verif_funct.c \
 		src/help_verif_funct.c \
+		src/help_verif_funct2.c \
 		src/error.c \
 		src/pipex.c \
-		src/fork_funct.c
+		src/fork_funct.c \
+		src/init_var.c \
+		src/pipex_help.c
 
 OBJ = ${SRC:.c=.o}
 
