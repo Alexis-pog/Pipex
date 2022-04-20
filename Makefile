@@ -6,7 +6,8 @@ INC = pipex.h
 SRC1 = 	src/verif_funct.c \
 		src/help_verif_funct.c \
 		src/error.c \
-		src/pipex.c
+		src/pipex.c \
+		src/fork_funct.c
 
 OBJ = ${SRC:.c=.o}
 
@@ -14,7 +15,7 @@ OBJ = ${SRC:.c=.o}
 SRC	:= $(notdir $(SRC1))
 OBJS = $(addprefix oubject/, $(OBJ))
 
-CFLAGS = -Wall -Wextra -Werror 
+CFLAGS = -Wall -Wextra -Werror -g
 
 VPATH := src/
 #---------------------------------------------------

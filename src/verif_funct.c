@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   verif_funct.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: workplace <workplace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: acoquele <acoquele@student@.42.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/28 10:32:56 by acoquele          #+#    #+#             */
-/*   Updated: 2022/03/21 15:06:16 by workplace        ###   ########.fr       */
+/*   Updated: 2022/03/30 13:48:07 by acoquele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ char	*ft_substr(char  *s, unsigned int start, size_t len)
 
 int	count_word(char *s, char c, t_split *split)
 {
-	size_t	count;
+	int		count;
 	size_t	index;
 
 	index = 0;
@@ -109,14 +109,19 @@ int	count_word(char *s, char c, t_split *split)
 		count = 0;
 	else if (s[index - 1] != c)
 		count++;
+	// printf("%d",count);
 	split->w_count = count;
+	// printf("%d",count);
 	return (count);
 }
 
-char	**free_malloc(char **tab, int count)
-{	
-	while (tab[--count])
-		free(tab[count]);
+char	**free_malloc(char **tab)
+{
+	int count;
+	count = 0;
+	
+	while (tab[count])
+		free(tab[count++]);
 	free (tab);
 	return (NULL);
 }
@@ -139,7 +144,7 @@ char	**make_a_word(char *s, char c, char **tab, size_t count)
 			word_index++;
 		tab[y_index] = ft_substr(s, str_index, word_index - str_index + 1);
 		if (!tab[y_index])
-			return (free_malloc(tab, y_index));
+			return (free_malloc(tab));
 		str_index = word_index + 1;
 		y_index++;
 	}

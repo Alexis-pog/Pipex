@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: workplace <workplace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: acoquele <acoquele@student@.42.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/28 11:41:58 by acoquele          #+#    #+#             */
-/*   Updated: 2022/03/23 12:16:41 by workplace        ###   ########.fr       */
+/*   Updated: 2022/04/19 17:19:34 by acoquele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,13 @@ void error_name(int i)
 
 void wrongly_written(char *cmd)
 {
-	int i;
-	i = ft_strlen(cmd);
-	write(1,"you wrote : ",13);
-	write(1,cmd,i);
-	write(1,"\nmaybe try rewriting it\n",25);
+	(void)cmd;	
+	write(1,"command not found\n",18);
+	// exit(1);
+}
+
+void error_exit(char *c)
+{
+	write(1,c,ft_strlen(c));
 	exit(1);
 }

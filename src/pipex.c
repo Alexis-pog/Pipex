@@ -3,120 +3,132 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: workplace <workplace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: acoquele <acoquele@student@.42.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/14 17:46:30 by acoquele          #+#    #+#             */
-/*   Updated: 2022/03/23 16:11:06 by workplace        ###   ########.fr       */
+/*   Updated: 2022/04/20 10:54:32 by acoquele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../pipex.h"
 
-void exet_cmd(t_split *split, int argc, char **envp)
+void exet_cmd(t_split *split, char **envp)
 {
-	if(split->index == 2)
+	if (split->index == 2)
 	{
-		split->fd_in = open(split->infile,O_RDONLY);
-		split->fd_out = open(split->outfile,O_RDWR,O_CREAT,O_TRUNC);
+		if(pipe(split->pipe) < 0)
+			error_exit("program could not pipe correctly");
 	}
-	pipe(split->pipe);
 	split->parent = fork();
 	if (split->parent < 0)
-		return(perror("fork : "));
+		file_void(2);
 	if(!split->parent)
-		child_process(split);
+		child_process(split, envp);
 	else
 		parent_process(split);
+	if (split->flag_cmd == 0)
+		free(split->path);
 
-}
-
-void child_process(t_split *split)
-{
-	
-	dup2(split->fd_in, 0);
-	dup2(split->pipe[1],1);
-	close(split->pipe[0]);
 }
 
 void parent_process(t_split *split)
 {
-
+	if (split->index == 2)
+		closein(split);
+	else if (split->index == split->argc - 2)
+		closeout(split);
 }
-
-void	init_in_out(t_split *split, char **argv)
+void child_process(t_split *split, char **envp)
 {
-	split->infile = argv[1];
-	split->outfile = argv[split->argc - 1];
+	if (split->index == 2)
+	{
+		start(split);
+		if (execve(split->path, split->arg ,envp) == -1)
+			exit(42);
+	}
+	else 
+	{	
+		finish(split);
+		if (execve(split->path, split->arg ,envp) == -1)
+			exit(42);
+	}
 }
 
 
 void verif_path(t_split *split, char **envp, char *cmd)
 {
 	int j = 0;
-	split->i = 0;
-	split->a = 0;
-	if(cmd[0] == '/' && access(cmd,F_OK) == -1)
-		wrongly_written(cmd);
-	while(strncmp("PATH=",envp[split->i],5) != 0)
-		split->i++;
-	split->path = ft_split(&envp[split->i][5],':', split);
-	while (split->path[j])
-		j++;
-	split->path[j] = NULL;
-	split->tmp1 = ft_strjoin("/",cmd);
-	j = 0;
-	while(split->path[j])
+	if(access(cmd, F_OK) == -1)
 	{
-		split->checker = access(ft_strjoin(split->path[j], split->tmp1), F_OK);
-		if(access(ft_strjoin(split->path[j], split->tmp1), F_OK) == 0)
-			break;
-		j++;
+		if(cmd[0] == '/' && access(cmd,F_OK) == -1)	
+			wrongly_written(cmd);
+		while(strncmp("PATH=",envp[split->i],5) != 0)
+			split->i++;
+		split->way = ft_split(&envp[split->i][5],':', split);
+		while (split->way[j])
+			j++;
+		split->way[j] = NULL;
+		split->tmp1 = ft_strjoin("/",cmd);
+		j = 0;
+		while(split->way[j])
+		{
+			split->checker = ft_strjoin(split->way[j], split->tmp1);
+			if(access(split->checker, F_OK) == 0)
+				break;
+			free(split->checker);
+			j++;
+		}
+		if(split->way[j] == NULL)
+		{
+			wrongly_written(cmd);
+			split->boolean = 2;
+		}
+		split->path = ft_strjoin(split->way[j], split->tmp1);
+		free(split->tmp1);
+		free(split->checker);
+		free_malloc(split->way);
+		split->flag_cmd = 0;
 	}
-	if(split->path[j] == NULL)
-		wrongly_written(cmd);
-	split->a = ft_strjoin(split->path[j], split->tmp1);
-	free(split->tmp1);
-	printf("\n%s\n",split->a);
-	free_malloc(split->path,split->w_count);
-	if(access(cmd, F_OK) == 0)
-		printf("OK");
-	printf("DONE");
+	else
+	{
+		split->flag_cmd = -1;
+		split->path = cmd;
+	}
+}
+
+void	verif_funct(t_verif *verif, char **argv)
+{
+	if (access(argv[1],F_OK) != 0 || access(argv[1],R_OK) != 0)
+			file_void(0);
+	verif->fd = open(argv[1],O_RDONLY);
+	if (read(verif->fd,verif->s,1) == 0)
+		empty_file(verif->fd);
+	close(verif->fd);
 }
 
 int main(int argc, char **argv, char **envp)
 {
 	t_verif verif;
 	t_split split;
-
-	init_verit_var(&verif,&split,argc);
-	init_in_out(&split,argv);
-	if (argc > 1)
+	if (argc == 5)
 	{
-		if (access(argv[1],F_OK) != 0 || access(argv[1],R_OK) != 0)
-			file_void(0);
-		verif.verif = ft_strrchr(argv[1], '.');
-		verif.vrf_lenght = ft_strlen(verif.verif);
-		if (verif.vrf_lenght != 4)
-			error_name(1);
-		if (ft_strncmp(verif.verif,".txt",verif.vrf_lenght) != 0)
-			error_name(1);
-		verif.fd = open(argv[1],O_RDONLY);
-		if (read(verif.fd,verif.s,1) == 0)
-			empty_file(verif.fd);
-		close(verif.fd);
-		printf("%d\n",verif.verif_nbr);
-		printf("%s\n",argv[2]);
-		while(split.index > argc - 2)
+		init_verit_var(&verif,&split,argc);
+		init_in_out(&split,argv);
+		verif_funct(&verif, argv);
+		while(split.index < argc - 1)
 		{
 			split.arg = ft_split(argv[split.index],' ', &split);
-			split.cmd_count = split.w_count;
+			if (!split.arg)
+				file_void(2);
 			verif_path(&split, envp, split.arg[0]);
-			
-			free_malloc(split.arg, split.cmd_count);
+			exet_cmd(&split,envp);
+			free_malloc(split.arg);
 			split.index++;
 		}
+		wait(0);
+		wait(0);
 	}
 	else
-		write(1,"missing arguments\n",18);
+		write(1,"missing or too much arguments\n",30);
 	return(0);
 }
